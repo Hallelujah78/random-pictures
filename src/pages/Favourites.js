@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React from "react";
+
 import Picture from "../components/Picture";
 import { usePictureContext } from "../PictureContext";
 
@@ -47,8 +47,15 @@ export const Favourites = () => {
   // this is our useContext custom hook = usePictures
   // this gives us access to the global state
   const { pictures } = usePictureContext();
-  const favorites = pictures.filter((picture) => picture.favorite === true);
-  if (favorites.length === 0) {
+
+  let favorites = [];
+  if (pictures !== null) {
+    console.log(`pictures: ${pictures[0].author}`);
+    favorites = pictures.filter((picture) => picture.favorite === true);
+    console.log(`favorites length: ${favorites.length}`);
+  }
+
+  if (favorites.length === 0 || favorites === null) {
     return (
       <Wrapper>
         <article className="empty">
@@ -57,6 +64,7 @@ export const Favourites = () => {
       </Wrapper>
     );
   }
+
   return (
     <Wrapper>
       <div>

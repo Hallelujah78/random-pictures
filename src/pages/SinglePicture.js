@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { usePictureContext } from "../PictureContext";
+import {
+  usePictureContext,
+  usePictureDispatchContext,
+} from "../PictureContext";
+import { getLocalStorage, setLocalStorage } from "../utils/utils";
 
 const Wrapper = styled.section`
   min-height: calc(100vh - 6rem - 15vh);
@@ -22,9 +27,18 @@ const Wrapper = styled.section`
 
 const SinglePicture = () => {
   const { id } = useParams();
-  const { pictures } = usePictureContext();
+  const { pictures, singlePictureID } = usePictureContext();
+  const { setSinglePictureID } = usePictureDispatchContext();
+  setLocalStorage("singlePicID", id);
 
-  const picture = pictures[parseInt(id)];
+  // useState required for page refresh or user hitting back button
+  const [picture, setPicture] = useState({});
+
+  useEffect(() => {
+    if (pictures) {
+      setPicture(pictures[parseInt(id)]);
+    }
+  }, [pictures]);
 
   return (
     <Wrapper>

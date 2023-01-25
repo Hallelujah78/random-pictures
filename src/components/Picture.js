@@ -1,6 +1,10 @@
 import styled, { keyframes } from "styled-components";
-import React from "react";
-import { usePictureDispatchContext } from "../PictureContext";
+import React, { useState, useEffect } from "react";
+import { getLocalStorage, setLocalStorage } from "../utils/utils";
+import {
+  usePictureContext,
+  usePictureDispatchContext,
+} from "../PictureContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -153,11 +157,29 @@ const PictureWrapper = styled.article`
 `;
 
 const Picture = ({ id, url_small, favorite }) => {
+  const { pictures } = usePictureContext();
   const { updateFavorites } = usePictureDispatchContext();
+  const [localPictures, setLocalPictures] = useState([]);
+
+  useEffect(() => {
+    if (pictures.length === 0) {
+      setLocalPictures(getLocalStorage("pictures"));
+    } else {
+      setLocalPictures(pictures);
+    }
+  }, []);
 
   const handleClick = (e) => {
     const id = e.currentTarget.id;
-    updateFavorites(id);
+    // there is a context
+    if (pictures !== null) {
+      updateFavorites(id);
+    } else {
+      // there is no context
+      const picture = localPictures.find((picture) => picture.id === id);
+      const isFavorite = picture.favorite;
+      localPictures[id].favorite = !isFavorite;
+    }
   };
 
   return (

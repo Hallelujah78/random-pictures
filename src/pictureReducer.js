@@ -20,6 +20,12 @@ const pictureReducer = (state, action) => {
         ...state,
         pictures: payload,
       };
+    case "SINGLE_PICTURE_ID":
+      console.log("SINGLE_PICTURE_ID", payload);
+      return {
+        ...state,
+        singlePicID: payload,
+      };
     case "SET_ERROR":
       console.log("SET_ERROR", payload);
       return {

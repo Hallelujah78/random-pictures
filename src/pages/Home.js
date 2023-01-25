@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import Picture from "../components/Picture";
 import {
   usePictureContext,
@@ -39,45 +39,17 @@ const Wrapper = styled.section`
 `;
 
 const Home = () => {
-  const { pictures } = usePictureContext();
-  const { setPictures, setError, setLoading } = usePictureDispatchContext();
-  const dataHandle = "pictures";
-
-  const getData = useCallback(async () => {
-    let data = getLocalStorage(dataHandle);
-    setLoading(true);
-    if (data) {
-      setPictures(data);
-    } else {
-      const response = await fetch(url);
-
-      if (response.status >= 200 && response.status <= 299) {
-        data = await response.json();
-        // add favorite property to each picture
-        data = data.map((picture) => {
-          picture.favorite = false;
-          // add a url to download small versions of each picture (filesize much smaller)
-          picture.url_small = `https://picsum.photos/id/${picture.id}/200`;
-          // add a url to download a medium picture, 1024px, for the SinglePicture page
-          picture.url_medium = `https://picsum.photos/id/${picture.id}/1024`;
-          return picture;
-        });
-        setLocalStorage("pictures", data);
-        setPictures(data);
-      } else {
-        console.error(response.text, response.statusText);
-        setError(true);
-      }
-    }
-    setLoading(false);
-    // eslint-disable-next-line
-  }, []);
+  const { pictures, singlePictureID } = usePictureContext();
+  const { setPictures, setError, setLoading, setSinglePictureID } =
+    usePictureDispatchContext();
+  const [local, setLocal] = useState();
 
   useEffect(() => {
-    getData();
-    // eslint-disable-next-line
-  }, []);
-
+    setLocal(true);
+  }, [pictures]);
+  if (pictures === null) {
+    return <div>this sucks!</div>;
+  }
   return (
     <Wrapper>
       <div>

@@ -1,14 +1,21 @@
 //set local storage
 
 export const setLocalStorage = (key, value) => {
+  console.log(`SETTING_LOCAL_STORAGE_KEY ${key} TO: ${value}`);
   localStorage.setItem(key, JSON.stringify(value));
 };
 
 //get local storage
 
 export const getLocalStorage = (key) => {
-  const value = JSON.parse(localStorage.getItem(key));
-  return value ? value : false;
+  const value = localStorage.getItem(key);
+
+  if (value === null || value === []) {
+    console.log(`GET_LOCALSTORAGE_VALUE: ${value}`);
+    return null;
+  } else {
+    return JSON.parse(value);
+  }
 };
 
 // display alert
