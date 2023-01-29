@@ -1,7 +1,6 @@
 //set local storage
 
 export const setLocalStorage = (key, value) => {
-  console.log(`SETTING_LOCAL_STORAGE_KEY ${key} TO: ${value}`);
   localStorage.setItem(key, JSON.stringify(value));
 };
 
@@ -11,7 +10,6 @@ export const getLocalStorage = (key) => {
   const value = localStorage.getItem(key);
 
   if (value === null || value === []) {
-    console.log(`GET_LOCALSTORAGE_VALUE: ${value}`);
     return null;
   } else {
     return JSON.parse(value);
@@ -32,3 +30,12 @@ export const displayAlert = (text, action, ref) => {
 
 // url
 export const url = "https://picsum.photos/v2/list?limit=100";
+// test URL for bad URL/http error
+// export const url = "https://nobberfestival.com";
+
+export const handleErrors = (response, setError) => {
+  if (!response.ok) {
+    setError(true);
+    throw Error(response.statusText);
+  }
+};

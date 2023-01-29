@@ -1,12 +1,15 @@
 import styled, { keyframes } from "styled-components";
 import React, { useState, useEffect } from "react";
-import { getLocalStorage, setLocalStorage } from "../utils/utils";
+import { getLocalStorage } from "../utils/utils";
 import {
   usePictureContext,
   usePictureDispatchContext,
 } from "../PictureContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart as faHeartSolid,
+  faExpandArrowsAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 
@@ -79,7 +82,7 @@ const PictureWrapper = styled.article`
     .icon-relative {
       z-index: 3;
       color: var(--primary-100);
-      /* opacity: 1 !important; */
+
       animation-name: ${fadeIn};
       animation-duration: 3s;
       position: absolute;
@@ -167,6 +170,7 @@ const Picture = ({ id, url_small, favorite }) => {
     } else {
       setLocalPictures(pictures);
     }
+    // eslint-disable-next-line
   }, []);
 
   const handleClick = (e) => {
@@ -185,6 +189,7 @@ const Picture = ({ id, url_small, favorite }) => {
   return (
     <PictureWrapper>
       <img id={id} src={url_small} alt="" />
+      <FontAwesomeIcon icon={faExpandArrowsAlt} />
       <FontAwesomeIcon
         id={id}
         onClick={(e) => {

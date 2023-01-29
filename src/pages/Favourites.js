@@ -50,9 +50,7 @@ export const Favourites = () => {
 
   let favorites = [];
   if (pictures !== null) {
-    console.log(`pictures: ${pictures[0].author}`);
     favorites = pictures.filter((picture) => picture.favorite === true);
-    console.log(`favorites length: ${favorites.length}`);
   }
 
   if (favorites.length === 0 || favorites === null) {

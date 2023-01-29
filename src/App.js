@@ -25,4 +25,4 @@ export const App = () => {
   );
 };
 
-// fotahs - https://picsum.photos/
+// photos from - https://picsum.photos/

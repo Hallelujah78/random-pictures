@@ -18,7 +18,7 @@ const initialState = {
   pictures: null,
   error: false,
   errorMsg: "",
-  loading: true,
+  loading: false,
   singlePictureID: "-1",
 };
 
@@ -71,38 +71,45 @@ export const PictureProvider = ({ children }) => {
   };
 
   const getData = useCallback(async () => {
-    // let data = getLocalStorage("pictures");
-    let data;
+    setLoading(true);
+    // let data;
     if (pictures === null) {
-      // if pictures are null, pictures are initialized with localStorage => no local storage
-      console.log("pictures are null. fetching data ...");
-      const response = await fetch(url);
-
-      if (response.status >= 200 && response.status <= 299) {
-        data = await response.json();
-        // add favorite property to each picture
-        data = data.map((item) => {
-          item.favorite = false;
-          // add a url to download small versions of each picture (filesize much smaller)
-          item.url_small = `https://picsum.photos/id/${item.id}/200`;
-          // add a url to download a medium picture, 1024px, for the SinglePicture page
-          item.url_medium = `https://picsum.photos/id/${item.id}/1024`;
-          return item;
-        });
-        setLocalStorage("pictures", data);
-        setPictures(data);
-      } else {
-        console.error(response.text, response.statusText);
+      // if pictures are null and pictures are initialized with localStorage => no local storage
+      // if no local, you must fetch
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          setError(false);
+          let data = await response.json();
+          // add favorite property to each picture
+          data = data.map((item) => {
+            item.favorite = false;
+            // add a url to download small versions of each picture (filesize much smaller)
+            item.url_small = `https://picsum.photos/id/${item.id}/200`;
+            // add a url to download a medium picture, 1024px, for the SinglePicture page
+            item.url_medium = `https://picsum.photos/id/${item.id}/1024`;
+            return item;
+          });
+          setLocalStorage("pictures", data);
+          setPictures(data);
+        } else {
+          setError(true);
+          throw new Error("Network response was not okay.");
+        }
+      } catch (error) {
         setError(true);
+        console.log(error);
       }
     }
+
+    // set loading to false so we can display error or what we fetched
     setLoading(false);
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     getData();
-    setLocalStorage("pictures", pictures);
+    // setLocalStorage("pictures", pictures);
     // eslint-disable-next-line
   }, []);
 
