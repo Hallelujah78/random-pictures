@@ -38,6 +38,7 @@ export const PictureProvider = ({ children }) => {
   };
 
   const setPictures = (pictures) => {
+    setLocalStorage("pictures", pictures);
     dispatch({
       type: "SET_PICTURES",
       payload: pictures,
@@ -88,6 +89,10 @@ export const PictureProvider = ({ children }) => {
             item.url_small = `https://picsum.photos/id/${item.id}/200`;
             // add a url to download a medium picture, 1024px, for the SinglePicture page
             item.url_medium = `https://picsum.photos/id/${item.id}/1024`;
+            // add a tags array
+            item.tags = [];
+            // add a description
+            item.description = "this is a default picture description";
             return item;
           });
           setLocalStorage("pictures", data);

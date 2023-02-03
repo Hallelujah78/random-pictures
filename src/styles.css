@@ -27,7 +27,7 @@ Variables
   --mainRed: #bd0303;
   --mainTransition: all 0.3s linear;
   --secondaryTransition: all 5s linear;
-  --mainSpacing: 0.3rem;
+  --mainSpacing: 0.125rem;
   --lightShadow: 2px 5px 3px 0px rgba(0, 0, 0, 0.5);
   --darkShadow: 4px 10px 5px 0px rgba(0, 0, 0, 0.5);
   --mainBorderRadius: 0.25rem;
@@ -45,6 +45,9 @@ Global Styles
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  -webkit-tap-highlight-color: transparent;
+
 }
 
 body {
@@ -87,6 +90,8 @@ img {
   display: block;
 }
 
+
+
 /* 
 ====== 
 Buttons 
@@ -95,18 +100,19 @@ Buttons
 .btn,
 .btn-white,
 .btn-primary {
+  width: fit-content;
+  height: 1.5rem;
+  padding: 0.25rem .8rem 0.25rem .8rem;
   text-transform: uppercase;
   letter-spacing: var(--mainSpacing);
-  color: var(--primaryColor);
-  border: 2px solid var(--primaryColor);
-  padding: 0.45rem 0.8rem;
-  display: inline-block;
+  color: var(--primary-900);
+  border: none;
+  background-color: #f0f0f0;
   transition: var(--mainTransition);
   cursor: pointer;
-  font-size: 0.8rem;
-  background: transparent;
+  font-size: 0.95rem;
   border-radius: var(--mainBorderRadius);
-  display: inline-block;
+  margin-top: 1rem;
 }
 
 .btn:hover {

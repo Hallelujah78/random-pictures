@@ -6,10 +6,7 @@ import {
   usePictureDispatchContext,
 } from "../PictureContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart as faHeartSolid,
-  faExpandArrowsAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 
@@ -77,12 +74,11 @@ const PictureWrapper = styled.article`
     }
   }
 
-  //hover: none = touch
+  //hover: none = touch = coarse pointer
   @media (pointer: coarse) {
     .icon-relative {
       z-index: 3;
       color: var(--primary-100);
-
       animation-name: ${fadeIn};
       animation-duration: 3s;
       position: absolute;
@@ -91,6 +87,7 @@ const PictureWrapper = styled.article`
       font-size: 2rem;
       transition: var(--mainTransition);
     }
+
     button {
       /* opacity: 1; */
       animation-name: ${fadeIn};
@@ -189,7 +186,7 @@ const Picture = ({ id, url_small, favorite }) => {
   return (
     <PictureWrapper>
       <img id={id} src={url_small} alt="" />
-      <FontAwesomeIcon icon={faExpandArrowsAlt} />
+
       <FontAwesomeIcon
         id={id}
         onClick={(e) => {
