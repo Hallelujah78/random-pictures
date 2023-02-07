@@ -1,6 +1,6 @@
 import styled from "styled-components";
+import Filter from "../components/Filter";
 
-import Picture from "../components/Picture";
 import {
   usePictureContext,
   usePictureDispatchContext,
@@ -10,6 +10,10 @@ import Error from "./Error";
 import { useEffect } from "react";
 
 const Wrapper = styled.section`
+  max-width: 95vw;
+  margin: 0 auto 0 auto;
+  .filter {
+  }
   .overlay {
     transition: opacity 0.3s linear;
     opacity: 0.85;
@@ -30,28 +34,6 @@ const Wrapper = styled.section`
   min-height: calc(100vh - 15vh - 15vh);
   h1 {
     text-align: var(--tc);
-  }
-  div {
-    display: grid;
-    grid-template-columns: 1fr;
-    row-gap: 1.25rem;
-    width: 100%;
-    min-height: 100%;
-    margin-bottom: 1.25rem;
-    justify-items: center;
-    align-items: center;
-    @media (min-width: 375px) {
-      grid-template-columns: 1fr 1fr;
-    }
-    @media (min-width: 768px) {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-    @media (min-width: 992px) {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    @media (min-width: 1400px) {
-      grid-template-columns: repeat(5, 1fr);
-    }
   }
 `;
 
@@ -84,12 +66,14 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <div className="overlay hide"></div>
+      {/* <div className="overlay hide"></div>
       <div>
         {pictures.map((picture) => {
           return <Picture key={picture.id} {...picture} />;
         })}
-      </div>
+      </div> */}
+
+      <Filter className="filter" />
     </Wrapper>
   );
 };

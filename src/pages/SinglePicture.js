@@ -8,7 +8,7 @@ import {
   usePictureContext,
   usePictureDispatchContext,
 } from "../PictureContext";
-import { setLocalStorage, getLocalStorage } from "../utils/utils";
+import { setLocalStorage, getLocalStorage, displayAlert } from "../utils/utils";
 import Loading from "../components/Loading";
 import Error from "./Error";
 
@@ -182,7 +182,10 @@ const Wrapper = styled.section`
       }
     }
   }
-
+  .download-alert {
+    text-align: center;
+    text-transform: uppercase;
+  }
   .img-container {
     .download-btn {
       margin-top: 0rem;
@@ -192,13 +195,12 @@ const Wrapper = styled.section`
   }
   .tag-container {
     margin-top: 1rem;
-    /* border: 1px solid red; */
-    align-content: space-evenly;
+
     display: none;
     grid-template-rows: 1fr auto;
     max-width: 100%;
     .tag-input {
-      margin: 0rem auto 2rem auto;
+      margin: 0rem auto 0rem auto;
 
       label {
         text-transform: uppercase;
@@ -229,20 +231,30 @@ const Wrapper = styled.section`
     }
     .tag {
       text-transform: lowercase;
-      vertical-align: middle;
+      /* vertical-align: middle; */
       background-color: #f0f0f0;
       display: inline-block;
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
       border-radius: 0.25rem;
-      padding: 0rem 0.5rem 0rem 0.5rem;
+      padding: 0rem 0.5rem 0.25rem 0.5rem;
       width: fit-content;
       height: fit-content;
       font-size: 1.25rem;
+      cursor: default;
+
       .tag-icon {
+        opacity: 0.8;
+        cursor: pointer;
+        transition: var(--mainTransition);
         vertical-align: middle;
         color: var(--primary-500);
         padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        &:hover {
+          opacity: 1;
+          transform: rotate(180deg) scale(1.3);
+        }
       }
     }
   }
@@ -258,14 +270,19 @@ const SinglePicture = () => {
   const [grayscale, setGrayscale] = useState(false);
   const [blur, setBlur] = useState(0);
   const [medURL, setMedURL] = useState("");
-  const [downloadURL, setDownloadURL] = useState("");
+  const [downloadURL, setDownloadURL] = useState();
   const [localPictures, setLocalPictures] = useState([]);
 
   // blur=0 returns nothing, must omit blur param if blur is zero
 
   // definition of download image handler
   function downloadImage(url) {
-    saveAs(url, "image");
+    saveAs(url, Date.now());
+    displayAlert(
+      "downloading image...",
+      "success",
+      document.querySelector(".download-alert")
+    );
   }
 
   useEffect(() => {
@@ -280,7 +297,8 @@ const SinglePicture = () => {
   useEffect(() => {
     if (pictures !== null) {
       // get the picture
-      const tempImage = pictures[parseInt(id)];
+      const tempImage = pictures.find((picture) => picture.id === id);
+
       //set the picture
 
       setPicture(tempImage);
@@ -309,7 +327,8 @@ const SinglePicture = () => {
     }
   }, [pictures, id, blur, grayscale, picture]);
 
-  const toggleInfo = () => {
+  const toggleInfo = (e) => {
+    e.preventDefault();
     const tagContainer = document.querySelector(".tag-container");
 
     if (tagContainer.style.display === "grid") {
@@ -317,6 +336,7 @@ const SinglePicture = () => {
     } else {
       tagContainer.style.display = "grid";
     }
+    document.querySelector(".tag-input :nth-child(2)").focus();
   };
 
   const toggleFilters = () => {
@@ -331,12 +351,20 @@ const SinglePicture = () => {
 
   const addTag = (e) => {
     e.preventDefault();
-    const tagValue = e.target.querySelector("input").value; //get input value
+    const tagValue = e.target.querySelector("input").value.toLowerCase(); //get input value
     if (pictures !== null) {
       const contextPicture = pictures.find((picture) => picture.id === id);
-      contextPicture.tags.push(tagValue); // will not work with no context
-      console.log(`pictures after tag added: ${pictures}`);
-      setPictures(pictures);
+      // todo: don't push tagValue if it already exists in the array, instead warn user of duplicate tag
+      if (contextPicture.tags.includes(tagValue)) {
+        displayAlert(
+          "that tag already exists!",
+          "warning",
+          document.querySelector(".alert")
+        );
+      } else {
+        contextPicture.tags.push(tagValue);
+        setPictures(pictures);
+      }
     }
 
     e.target.querySelector("input").value = "";
@@ -375,7 +403,7 @@ const SinglePicture = () => {
     <Wrapper>
       <article>
         <button className="btn filter-btn" onClick={(e) => toggleFilters(e)}>
-          <span>Show</span> Filters
+          <span>Image</span> Filters
         </button>
         <div className="button-container">
           <div className="edit-container">
@@ -406,13 +434,14 @@ const SinglePicture = () => {
           </div>
         </div>
         <button className="btn tag-button" onClick={(e) => toggleInfo(e)}>
-          Edit Info
+          Edit Tags
         </button>
 
         <div className="tag-container">
           <form onSubmit={(e) => addTag(e)} className="tag-input">
             <label>new tag </label>
             <input type="text" placeholder="enter descriptive tag" />
+            <h3 className="alert"></h3>
           </form>
           <div className="tag-list">
             <h4>Tags</h4>
@@ -432,7 +461,7 @@ const SinglePicture = () => {
             </ul>
           </div>
         </div>
-
+        <h4 className="download-alert alert"></h4>
         <div className="img-container">
           <button
             className="btn download-btn"

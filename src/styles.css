@@ -116,7 +116,7 @@ Buttons
 }
 
 .btn:hover {
-  background: var(--primaryColor);
+  background: var(--primary-900);
   color: var(--mainWhite);
 }
 
@@ -157,4 +157,49 @@ Buttons
 .btn-details:hover {
   background: var(--primaryLightColor);
   border-color: var(--primaryLightColor);
+}
+
+.tag {
+  color: var(--primary-900);
+  text-transform: lowercase;
+  vertical-align: middle;
+  background-color: #f0f0f0;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  padding: 0rem 0.5rem 0rem 0.5rem;
+  width: fit-content;
+  height: fit-content;
+  font-size: 1.25rem;
+  cursor: pointer;
+
+}
+
+.alert {
+  min-height: 2rem;
+  height: 2rem;
+  margin-top: .5rem;
+}
+
+.alert-warning {
+  text-align: center;
+  border-radius: .25rem;
+  padding: .25rem .5rem .25rem .5rem;
+  opacity: .5;
+  background-color: red;
+  font-weight: 300;
+  color: white;
+
+}
+
+.alert-success {
+  text-align: center;
+  border-radius: .25rem;
+  padding: .25rem .5rem .25rem .5rem;
+  opacity: .5;
+  background-color: green;
+  font-weight: 300;
+  color: white;
+
 }
