@@ -66,13 +66,6 @@ const Home = () => {
 
   return (
     <Wrapper>
-      {/* <div className="overlay hide"></div>
-      <div>
-        {pictures.map((picture) => {
-          return <Picture key={picture.id} {...picture} />;
-        })}
-      </div> */}
-
       <Filter className="filter" />
     </Wrapper>
   );
