@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePictureContext } from "../PictureContext";
 import { getLocalStorage } from "../utils/utils";
 import Loading from "./Loading";
@@ -18,6 +18,12 @@ const Wrapper = styled.div`
   .tag-container {
     display: none;
     margin: 0rem 1rem 1rem 1rem;
+
+    p {
+      font-size: 1.4rem;
+      font-weight: 200;
+      text-align: center;
+    }
 
     .tag {
     }
@@ -50,6 +56,7 @@ const Wrapper = styled.div`
 const Filter = () => {
   const { pictures, error, loading } = usePictureContext();
   const [tags, setTags] = useState([]);
+  // eslint-disable-next-line
   const [localPictures, setLocalPictures] = useState([]);
   const [activeFilters, setActiveFilters] = useState([]);
   const [filteredPictures, setFilteredPictures] = useState(pictures);
@@ -64,11 +71,11 @@ const Filter = () => {
     }
   };
 
-  const filterPictures = () => {
+  const filterPictures = useCallback(() => {
     //for each tag in activeFilters, check if it is in the tags array of each picture in pictures
     // if it is, add to tempFilteredPictures, then set filteredPictures
     let tempFilteredPictures = [];
-    console.log(`The activeFilters: ${activeFilters}`);
+
     activeFilters.forEach((tag) => {
       tempFilteredPictures = tempFilteredPictures.concat(
         pictures.filter((picture) => {
@@ -76,9 +83,9 @@ const Filter = () => {
         })
       );
     });
-    console.log(tempFilteredPictures);
+
     setFilteredPictures([...new Set(tempFilteredPictures)]);
-  };
+  }, [activeFilters, pictures]);
 
   const toggleActiveFilters = (e) => {
     const tagDOM = e.currentTarget; // the button element
@@ -126,7 +133,7 @@ const Filter = () => {
       //filter the pictures and display them
       filterPictures();
     }
-  }, [activeFilters]);
+  }, [activeFilters, pictures, filterPictures]);
 
   if (loading) {
     return (
@@ -144,6 +151,34 @@ const Filter = () => {
     );
   }
 
+  if (tags?.length === 0) {
+    return (
+      <Wrapper>
+        {/* todo: add a match all or match any toggle */}
+        <div className="filter-container">
+          <button
+            onClick={() => {
+              toggleFilters();
+            }}
+            className="btn"
+          >
+            Filter images
+          </button>
+        </div>
+        <div className="tag-container">
+          <p>
+            create some descriptive tags that you can use to filter your
+            images...
+          </p>
+        </div>
+        <div className="image-container">
+          {filteredPictures.map((picture) => {
+            return <Picture key={picture.id} {...picture} />;
+          })}
+        </div>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper>
       {/* todo: add a match all or match any toggle */}
